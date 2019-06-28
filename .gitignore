@@ -1,1 +1,7 @@
 *vcf
+01-ADMIXTURE/*/*/*.P
+01-ADMIXTURE/*/*/*.Q
+01-ADMIXTURE/*/*/*.out
+01-ADMIXTURE/*/*/*.Q_*
+
+
