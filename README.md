@@ -2,11 +2,11 @@
 Comparison of fish RAD sequence data: compare different species and different marker types for population/fisheries genomic
 
 ## Data
-RADseq SNP calling was performed by [P. Guerrin using a dDocent-based pipeline](https://github.com/Grelot/seaConnect--dDocent)  
+RADseq SNP calling was performed by [P. Guerrin using a dDocent-based pipeline](https://github.com/Grelot/seaConnect--dDocent)    
 SNPs were then filtered for missing data, maf, ... and outliers were detected to retain 
-only adaptive or neutral loci for both species. By [Emilie Boulanger](https://github.com/eboulanger/seaConnect--dataPrep)
-Finally, datasets are converted to the correct formats for different analyses.  
-Move the necessary files to your radFishComp data folder
+only adaptive or neutral loci for both species. By [Emilie Boulanger](https://github.com/eboulanger/seaConnect--dataPrep)  
+Finally, datasets are converted to the correct formats for different analyses.    
+Move the necessary files to your radFishComp data folder  
 ```
 cp ../seaConnect--dataPrep/04-finalPrep/01-Diplodus/*.bed 00-Data/01-Diplodus/
 cp ../seaConnect--dataPrep/04-finalPrep/01-Diplodus/*.bim 00-Data/01-Diplodus/
@@ -15,6 +15,7 @@ cp ../seaConnect--dataPrep/04-finalPrep/01-Diplodus/*.bim 00-Data/01-Diplodus/
 ## Dependencies
 You will need to install the following software:  
 - [Admixture](http://software.genetics.ucla.edu/admixture/download.html)
+
 And you will need to install the following R libraries:  
 - ggplot2
 - reshape2
