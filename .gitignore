@@ -1,3 +1,6 @@
+.DS_Store
+.Rhistory
+
 *.vcf
 *.pdf
 *.txt
@@ -15,7 +18,8 @@
 
 
 00-Data/*/*/*
-
+00-Data/old-01-Diplodus
+00-Data/old-02-Mullus
 
 01-ADMIXTURE/*/*/*.P
 01-ADMIXTURE/*/*/*.Q
