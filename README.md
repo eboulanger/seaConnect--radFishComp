@@ -1,3 +1,4 @@
+**ce README n'est pas mis à jour. Pour l'instant ce dépot git sers à vous partager les résultats/figures des analyses que je fait pour SEACONNECT au fur et à mesure.**
 # seaConnect--radFishComp
 Comparison of fish RAD sequence data: compare different species and different marker types for population/fisheries genomic
 

@@ -7,6 +7,7 @@
 *.pptx
 *.csv
 *.docx
+*.txt
 
 *.gz
 *.gz.tbi
@@ -21,7 +22,9 @@
 00-Data
 
 old_*
+*forMe*
 
+00-Misc/stamps
 01-ADMIXTURE
 01-ADMIXTURE/*/*/*.P
 01-ADMIXTURE/*/*/*.Q

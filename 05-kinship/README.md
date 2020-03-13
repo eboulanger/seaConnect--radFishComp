@@ -4,13 +4,7 @@ Objective:
 - explore kinship patterns and compare them between species
 
 individual-pairs with high kinship (>0.1) :
-  what are the geographical distances? different patterns between species?
-  -> visualise as map: "spatial graph" of high-kinship pairs!
-     hoe juist? - als hoge kinship between twee sites: lijn
-     			- als meerdere hoge kinship pairs between twee sites: dikkere lijn
-     			- hoge kinship pairs tussen individuen van zelfde site: loop? of dikte punt?
-     			
-     			
+  what are the geographical distances? different patterns between species?   			
 
 ## ANALYSES	
 
