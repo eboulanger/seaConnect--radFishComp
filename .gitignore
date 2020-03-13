@@ -1,5 +1,6 @@
 .DS_Store
 .Rhistory
+.gitignore
 
 *.vcf
 *.pdf
@@ -16,14 +17,16 @@
 *.tfam
 *.tped
 
-
+00-Data
 00-Data/*/*/*
 00-Data/old-01-Diplodus
 00-Data/old-02-Mullus
 
+01-AdDMIXTURE
 01-ADMIXTURE/*/*/*.P
 01-ADMIXTURE/*/*/*.Q
 01-ADMIXTURE/*/*/*.out
 01-ADMIXTURE/*/*/*.Q_*
 
 
+.Rproj.user

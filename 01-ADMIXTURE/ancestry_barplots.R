@@ -1,27 +1,32 @@
-##### cross-validation plot ADMIXTURE -----
-getwd()
-setwd("/Users/eboulanger-admin/Documents/project_SEACONNECT/seaConnect--radFishComp/01-ADMIXTURE/01-Diplodus/c-adaptive")
 
-# library(ggplot2)
-# library(reshape2)
-# crossval <- read.table("cross_validation.txt")
-# K <- c(1: nrow(crossval))
-# crossval_gg <- cbind(crossval, K) 
-# pdf("cross_validation.pdf", width = 5, height = 5)
-# ggplot(data = crossval_gg, aes(x = K, y = V4)) +
-#   geom_line() +
-#   geom_point() +
-#   ylab("Cross-validation error")
-# dev.off()  
+# set arguments
+inputFolder <- "01-Diplodus/c-adaptive"
+   workDir <- paste0("~/Documents/project_SEACONNECT/seaConnect--radFishComp/01-ADMIXTURE/",
+                  inputFolder)
+
+inputFile <- "dip_adaptive_494"
+Qmatrix2pop <- paste0(inputFile, ".2.Q")
+Qmatrix3pop <- paste0(inputFile, ".3.Q")
+outputFigure2pop <- paste0("figures/",inputFile,"_2")
+outputFigure3pop <- paste0("figures/",inputFile,"_3")
+outputFigureCombi <- paste0("figures/",inputFile,"_combi")
+
+# set working directory
+setwd(workDir)
+
+# load libraries
+library(pophelper)
+
+library(maps)
+library(mapdata)
+library(dplyr)
+library(plotrix)
 
 ##### stacked barplot ADMIXTURE -----
 
-library(pophelper)
-#library(gridExtra)
-
 ## import ancestry proportions
-ancestry2 <- read.table("dip_adaptive_494.2.Q", col.names = c("Cluster1","Cluster2"))
-ancestry3 <- read.table("dip_adaptive_494.3.Q", col.names = c("Cluster1","Cluster2","Cluster3"))
+ancestry2 <- read.table(Qmatrix2pop, col.names = c("Cluster1","Cluster2"))
+ancestry3 <- read.table(Qmatrix3pop, col.names = c("Cluster1","Cluster2","Cluster3"))
 
 #ancestry3 <- read.table("dip_adaptive_wrongid.3.Q", col.names = c("Cluster1","Cluster2","Cluster3"))
 
@@ -50,7 +55,7 @@ barplot(t(ancestry2_lon[,c("Cluster1","Cluster2")]), col = rainbow(3),
 
 # read in / transform data as qlist
 # make own qlist from dataframes
-qlist <- list("dip_adaptive_494.2"=ancestry2_lon[,3:4],"dip_adaptive_494.3"=ancestry3_lon[,3:5])
+qlist <- list("2_clusters"=ancestry2_lon[,3:4],"3_clusters"=ancestry3_lon[,3:5])
 qlist <- lapply(qlist,"rownames<-",ancestry3_lon$ID) # add individual labels
 attributes(qlist)
 
@@ -66,26 +71,25 @@ str(label2)
 # only K = x
 plotQ(qlist[1], returnplot = F, exportplot = T, showindlab = F,
       grplab=label2, grplabsize=1,linesize=0.1,pointsize=1, grplabpos = 0.4, 
-      splab = "D. surmuletus adaptive \nK = 2", splabsize = 3, divsize = 0.1, 
+      splab = paste0(inputFile,"\nK = 2"), # label to appear on the right side of plot
+      splabsize = 3, divsize = 0.1, 
       showlegend = T, legendtextsize = 2, legendkeysize = 2,
       ordergrp = TRUE, subsetgrp=c("Alboran\nSea", "Western\nMediterranean","Central\nMediterranean","Adriatic\nSea","Ionian\nSea","Tunisian\nPlateau","Aegean\nSea", "Levantine\nSea"),
-      grplabangle=0, imgtype = "pdf")
+      grplabangle=0, imgtype = "pdf",
+      outputfilename = outputFigure2pop)
 
 # both K = 2 and K = 3
 plotQ(qlist[1:2], returnplot = F, exportplot = T, showindlab = F,
       imgoutput="join",
       grplab=label2, grplabsize=1,linesize=0.1,pointsize=1, grplabpos = 0.3, 
-      splab = c("D. surmuletus adaptive \nK = 2", "D. surmuletus adaptive \nK = 3"),
+      splab = c(paste0(inputFile,"\nK = 2"),paste0(inputFile,"\nK = 3")), # labels to appear on the right side of plot
       splabsize = 2, divsize = 0.1, 
       showlegend = T,legendtextsize = 2, legendkeysize = 2,
       ordergrp = TRUE, subsetgrp=c("Alboran\nSea", "Western\nMediterranean","Central\nMediterranean","Adriatic\nSea","Ionian\nSea","Tunisian\nPlateau","Aegean\nSea", "Levantine\nSea"),
-      grplabangle=0, imgtype = "pdf")
+      grplabangle=0, imgtype = "pdf",
+      outputfilename = outputFigureCombi)
 
 ##### ancestry pie maps ----
-library(maps)
-library(mapdata)
-library(dplyr)
-library(plotrix)
 
 # get mean ancestry by sampling cell and add geographic data
 ancestry2_cell <- summarise(group_by(ancestry2_lon, SamplingCell), 
@@ -101,13 +105,14 @@ pie2_pop <- ancestry2_cell[, 2:3] %>%
 lon_pop <- as.numeric(as.vector(ancestry2_cell$Longitude))
 lat_pop <- as.numeric(as.vector(ancestry2_cell$Latitude))
 
-pdf(file="dip_adaptive_494.2.piemap.pdf", width = 7, height = 5)
+  pdf(file=paste0(outputFigure2pop,"_piemap.pdf"), width = 7, height = 5)
 carte=map("worldHires", xlim=c(-8,37), ylim=c(29.5,47), col="gray90", fill=TRUE)
 #points(membership2_pop$lon, membership2_pop$lat, pch=19, col="red", cex=0.5) 
 for(i in 1:nrow(ancestry2_cell)) {
   floating.pie(lon_pop[i], lat_pop[i], pie2_pop[i, ], radius = 0.4, 
                col = c("#2121D9","#9999FF"))
 }
+title(paste0(inputFile," | K = 2"))
 legend("bottomleft", 
        legend = c("Cluster 1", "Cluster2"), 
        title = "Ancestry fractions",
@@ -116,7 +121,7 @@ legend("bottomleft",
        bty ="o", bg ="gray90",box.col = "gray90")
 map.scale(5.7, 31.1,relwidth = 0.15, metric = TRUE, ratio = FALSE, cex = 0.8)
 map.axes(cex.axis=0.8)
-dev.off()
+  dev.off()
 
 
 
@@ -124,7 +129,9 @@ dev.off()
 x
 ### reserve ####
 
-subsetgrp=c("Saharan Upwelling","Alboran Sea", "Western Mediterranean","Adriatic Sea","Ionian Sea","Tunisian Plateau","Aegean Sea", "Levantine Sea"),
+#library(gridExtra)
+
+subsetgrp=c("Saharan Upwelling","Alboran Sea", "Western Mediterranean","Adriatic Sea","Ionian Sea","Tunisian Plateau","Aegean Sea", "Levantine Sea")
 
 p2 <- plotQ(q3, returnplot = T, exportplot = F, showindlab = F,
             grplab=label2, grplabsize=2,linesize=0.3,pointsize=3, grplabpos = 0.5, splabsize = 2,
