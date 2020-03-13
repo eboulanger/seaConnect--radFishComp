@@ -1,11 +1,12 @@
 .DS_Store
 .Rhistory
+
 .gitignore
 
 *.vcf
-*.pdf
-*.txt
 *.pptx
+*.csv
+*.docx
 
 *.gz
 *.gz.tbi
@@ -18,11 +19,10 @@
 *.tped
 
 00-Data
-00-Data/*/*/*
-00-Data/old-01-Diplodus
-00-Data/old-02-Mullus
 
-01-AdDMIXTURE
+old_*
+
+01-ADMIXTURE
 01-ADMIXTURE/*/*/*.P
 01-ADMIXTURE/*/*/*.Q
 01-ADMIXTURE/*/*/*.out
