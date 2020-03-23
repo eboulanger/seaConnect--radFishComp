@@ -85,7 +85,7 @@ title("DAPC D. sargus adaptive | ecoregions a priori\n")
 ## DAPC without a priori populations ----
 
 # search for clusters
-grp <- find.clusters(dat, max.n.clust=20, n.pca = round(nrow(dat)/3)) # n.pca = 1/3 n.ind
+grp <- find.clusters(dat, max.n.clust=20, n.pca = round(nrow(dat)/3), n.clust = 2) # n.pca = 1/3 n.ind
 # run DAPC with new a priori clusters
 dapc.clust <- dapc(dat, grp$grp, n.pca = nrow(dat)/3, n.da = 2)
 scatter(dapc.clust)
@@ -100,7 +100,20 @@ dapc.clust.best.score <- a.score(dapc.clust.best, n.sim = 1000) # neutral : $mea
                                                                 #           $mean = 0.6446182 for K = 3
                                                                 #           $mean = 0.6668141 for K = 4
                                                                 #           $mean = 0.6384799 for K = 5
- 
+  # write Rdata file for neutral DAPC results, because take a long time to run
+  saveRDS(dapc.clust.best, file = "b-neutral/DAPC_dip_neutral_K2.rds")
+  # read in Rdata to not have to run dapc again
+  dapc.clust.best <- readRDS("b-neutral/DAPC_dip_neutral_K2.rds")
+
+  # create popmap for later analyses
+  indmap <- as.data.frame(dapc.clust.best$posterior)
+  indmap$STRATA <- rep("cluster", nrow(indmap))
+  indmap[indmap$`1` > 0.5, "STRATA"] <- "cluster1"
+  indmap[indmap$`1` < 0.5, "STRATA"] <- "cluster2"
+  popmap <- cbind(rownames(indmap), indmap$STRATA)
+  colnames(popmap) <- c("INDIVIDUALS", "STRATA")
+  write.table(popmap, file = "b-neutral/dip_popmap_neutralDapcPopK2.txt", sep = "\t", quote = FALSE, row.names = FALSE)
+  
 # plot DAPC
 # use pophelper standard colours
 standard_12=c("#2121D9","#9999FF","#DF0101","#04B404","#FFFB23","#FF9326","#A945FF","#0089B2","#B26314","#610B5E","#FE2E9A","#BFF217")
@@ -125,6 +138,10 @@ ind_posterior <- dapc.clust.best$posterior %>%
   arrange(Longitude)
 # set correct levels order, so that ggplot plots in the order we want
 ind_posterior$IND <- factor(ind_posterior$IND, levels = ind_posterior$IND[order(ind_posterior$Longitude)])
+
+  # save individual posterior probs 
+  write.csv(ind_posterior, file = "b-neutral/DAPCposterior_dip_neutral_K2.csv")
+
 # long format for gglot
 ggdata_posterior <- melt(ind_posterior, id.vars = c("IND", "SamplingCell", "Longitude", "Latitude"))
  
@@ -169,7 +186,7 @@ legend("bottomleft",
       bty ="o", bg ="gray90",box.col = "gray90")
 map.scale(3, 31, ratio=FALSE, relwidth=0.15, cex=1)
 map.axes(cex.axis=0.8)
-rasterImage(pic$diplodus_sargus_adaptive, 
+rasterImage(pic$diplodus_sargus_neutral, 
             xleft = 33, xright = 37, 
             ybottom = 45.1, ytop = 47)
 dev.off()  

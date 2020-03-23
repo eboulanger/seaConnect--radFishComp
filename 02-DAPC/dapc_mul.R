@@ -91,6 +91,20 @@ dapc.clust.best.score <- a.score(dapc.clust.best, n.sim = 1000) # neutral : $mea
                                                                 #           $mean = 0.609534 for K = 3
                                                                 #           $mean = 0.6706575 for K = 4
                                                                 #           $mean = 0.6384799 for K = 5
+     # write Rdata file for neutral DAPC results, because take a long time to run
+     saveRDS(dapc.clust.best, file = "b-neutral/DAPC_mul_neutral_K2.rds")
+     # read in Rdata to not have to run dapc again
+     dapc.clust.best <- readRDS("b-neutral/DAPC_mul_neutral_K2.rds")
+     
+     # create popmap for later analyses
+     indmap <- as.data.frame(dapc.clust.best$posterior)
+     indmap$STRATA <- rep("cluster", nrow(indmap))
+     indmap[indmap$`1` > 0.5, "STRATA"] <- "cluster1"
+     indmap[indmap$`1` < 0.5, "STRATA"] <- "cluster2"
+     popmap <- cbind(rownames(indmap), indmap$STRATA)
+     colnames(popmap) <- c("INDIVIDUALS", "STRATA")
+     write.table(popmap, file = "b-neutral/mul_popmap_neutralDapcPopK2.txt", sep = "\t", quote = FALSE, row.names = FALSE)
+
 
 # plot DAPC
 # use pophelper standard colours
