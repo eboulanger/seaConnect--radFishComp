@@ -8,6 +8,9 @@
 *.csv
 *.docx
 *.txt
+*.rds
+
+*.spid
 
 *.gz
 *.gz.tbi
@@ -23,6 +26,7 @@
 
 old_*
 *forMe*
+depr*
 
 00-Misc/stamps
 01-ADMIXTURE

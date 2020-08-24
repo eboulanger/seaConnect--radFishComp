@@ -18,6 +18,8 @@ You will need to install the following software:
 And you will need to have the following R libraries:  
 ggplot2, reshape2, pophelper, maps, mapdata, dplyr, plotrix, adegenet, ...
 
+## 01-Kinship
+
 ## 02-DAPC
 
 Infer population structure with DAPC from [adegenet](http://adegenet.r-forge.r-project.org/files/tutorial-dapc.pdf).
@@ -31,9 +33,24 @@ For both a scatterplot is created. For the latter, a pie map with the posterior 
 probabilities is created comparable to the ancestry pie maps created in `01-ADMIXTURE`,
 as well as a barplot of the posterior membership probabilities with individuals ordered by longitude.
 
-## 05-kinship
+## 03-RDA
 
-## 07-Ne
+Constrained ordination to infer if genetic structure is driven by certain 
+environmental variables & look for signals of local adaptation.
+
+Environmental variables considered:  
+- Sea Surface Salinity  
+- Sea Surface Temperature  
+- habitat: substrate PC axes  
+- geographic distance: dbMEMs (18 for D. sargus, 20 for M. surmuletus)  
+- larval connectivity: AEMs   (97 for D. sargus and M. surmuletus)  
+
+We have too many potential explanatory variables so we'll go through several variable selection steps.  
+- `compile_explanatory_vars.R` : run separate RDAs with dbMEMs or AEMs as expl variables.
+Use ordi2step to perform (forward?) variable selection.
+- `run_rda_neutral|adaptive.R` : run RDA with previously selected dbMEMs and AEMs, as well as SST, SSS and habitat PCs. 
+
+
 
 
 
