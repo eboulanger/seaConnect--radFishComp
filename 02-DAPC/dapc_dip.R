@@ -5,7 +5,7 @@
 ### tutorial by adegenet
 ### http://adegenet.r-forge.r-project.org/files/tutorial-dapc.pdf
 
-setwd("/Users/eboulanger-admin/Documents/project_SEACONNECT/seaConnect--radFishComp/02-DAPC/01-Diplodus")
+setwd("./02-Mullus")
 
 # load packages
 library(adegenet)
@@ -22,7 +22,7 @@ library(mapdata)
 library(plotrix)
 
 # set variables
-sp <- "dip"
+sp <- "mul"
 subset <- "adaptive"
 
 # import stamps 
@@ -103,16 +103,16 @@ dapc.clust.best.score <- a.score(dapc.clust.best, n.sim = 1000) # neutral : $mea
   # write Rdata file for neutral DAPC results, because take a long time to run
   saveRDS(dapc.clust.best, file = "c-adaptive/DAPC_dip_adaptive_K3.rds")
   # read in Rdata to not have to run dapc again
-  dapc.clust.best <- readRDS("b-neutral/DAPC_dip_neutral_K2.rds")
+  dapc.clust.best <- readRDS("c-adaptive/DAPC_dip_adaptive_K3.rds")
 
   # create popmap for later analyses
-  indmap <- as.data.frame(dapc.clust.best$posterior)
-  indmap$STRATA <- rep("cluster", nrow(indmap))
-  indmap[indmap$`1` > 0.5, "STRATA"] <- "cluster1"
-  indmap[indmap$`1` < 0.5, "STRATA"] <- "cluster2"
-  popmap <- cbind(rownames(indmap), indmap$STRATA)
-  colnames(popmap) <- c("INDIVIDUALS", "STRATA")
-  write.table(popmap, file = "b-neutral/dip_popmap_neutralDapcPopK2.txt", sep = "\t", quote = FALSE, row.names = FALSE)
+  indmap <- as.data.frame(dapc.clust.best$grp)
+  indmap$INDIVIDUALS <- rownames(indmap)
+  indmap$STRATA <- paste0("Cluster", indmap$`dapc.clust.best$grp`)
+  indmap <- indmap[,c("INDIVIDUALS", "STRATA")]
+  head(indmap)
+  unique(indmap$STRATA)
+  #write.table(indmap, file = "c-adaptive/DAPCgrp_dip_adaptive_K3.txt", sep = "\t", quote = FALSE, row.names = FALSE)
   
 # plot DAPC
 # use pophelper standard colours
@@ -139,8 +139,21 @@ ind_posterior <- dapc.clust.best$posterior %>%
 # set correct levels order, so that ggplot plots in the order we want
 ind_posterior$IND <- factor(ind_posterior$IND, levels = ind_posterior$IND[order(ind_posterior$Longitude)])
 
-  # save individual posterior probs 
-  write.csv(ind_posterior, file = "b-neutral/DAPCposterior_dip_neutral_K2.csv")
+ind_assign <- dapc.clust.best$ind.coord %>% 
+  cbind(., dapc.clust.best$assign) %>% 
+  as.data.frame() %>% 
+  mutate(IND = rownames(.)) %>% 
+  mutate(SamplingCell = gsub("i.*","", IND)) %>% 
+  mutate(cluster = paste0("Cluster",.$V2)) %>% 
+  select(SamplingCell, IND, cluster) %>% 
+  left_join(sampling, by = "SamplingCell") %>% 
+  select(-Sampler, -ComplCell, -Area_km2, -Ecoregion, -Ecoregion_adj, -Temp_mean)
+  #arrange(Longitude)
+  # save 
+  #write.csv(ind_assign, file = "c-adaptive/DAPCassign_dip_adaptive_K3.csv")
+  # set correct levels order, so that ggplot plots in the order we want
+  #ind_assign$IND <- factor(ind_assign$IND, levels = ind_assign$IND[order(ind_assign$Longitude)])
+  
 
 # long format for gglot
 ggdata_posterior <- melt(ind_posterior, id.vars = c("IND", "SamplingCell", "Longitude", "Latitude"))
@@ -164,20 +177,30 @@ cell_posterior <- summarise(group_by(ind_posterior, SamplingCell),
                             #Cluster5 = mean(Cluster5),
                             Longitude = first(Longitude),
                             Latitude = first(Latitude))
+# add sampling size per site
+pop_dip <- read.table("../../00-Misc/sampling_maps/data/dip_population_map_297ind.txt", sep = "\t", head = TRUE)
+# wrangle to one dataset with coords and sample size diplodus and mullus
+n_dip <- pop_dip %>% group_by(STRATA) %>% summarise(length(INDIVIDUALS))
+colnames(n_dip) <- c("SamplingCell", "n_dip")
+cell_posterior <- left_join(cell_posterior, n_dip)
+
 # plot map 
 pie_cell <- cell_posterior[, 2:(ncol(ind_posterior)-3)] %>% 
   data.matrix(rownames.force = NA)
  
 lon_cell <- as.numeric(as.vector(cell_posterior$Longitude))
 lat_cell <- as.numeric(as.vector(cell_posterior$Latitude))
+
+pie_size <- scales::rescale(cell_posterior$n_dip, to=c(0.2,0.6))
  
  #pdf(file="c-adaptive/DAPCmap_dip_adaptive_K3.pdf", width = 16, height = 9)
-map("worldHires", xlim=c(-8,37), ylim=c(29.5,47),col = "gray80", boundary = TRUE, interior = FALSE, fill = TRUE, border = NA)
+map("world", xlim=c(-8,37), ylim=c(29.5,47),col = "gray80", boundary = TRUE, interior = FALSE, fill = TRUE, border = NA)
  #points(membership2_pop$lon, membership2_pop$lat, pch=19, col="red", cex=0.5) 
 for(i in 1:nrow(cell_posterior)) {
-  floating.pie(lon_cell[i], lat_cell[i], pie_cell[i, ], radius = 0.4, 
-              col = standard_12)
+  floating.pie(lon_cell[i], lat_cell[i], pie_cell[i, ], radius = pie_size[i], 
+               col = standard_12)
 }
+
 legend("bottomleft", 
       legend = colnames(pie_cell), 
       title =  "Posterior Membership Probabilities",
