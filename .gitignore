@@ -29,11 +29,11 @@ old_*
 depr*
 
 00-Misc/stamps
-01-ADMIXTURE
-01-ADMIXTURE/*/*/*.P
-01-ADMIXTURE/*/*/*.Q
-01-ADMIXTURE/*/*/*.out
-01-ADMIXTURE/*/*/*.Q_*
+06-ADMIXTURE
+06-ADMIXTURE/*/*/*.P
+06-ADMIXTURE/*/*/*.Q
+06-ADMIXTURE/*/*/*.out
+06-ADMIXTURE/*/*/*.Q_*
 
 
 .Rproj.user

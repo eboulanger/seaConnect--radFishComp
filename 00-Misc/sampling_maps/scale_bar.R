@@ -141,42 +141,43 @@ scale_bar <- function(lon, lat, distance_lon, distance_lat, distance_legend, dis
 
 
 # Examples ----
-usa_map <- map_data("state")
-P <- ggplot() + geom_polygon(data = usa_map, aes(x = long, y = lat, group = group)) + coord_map()
-
-P + scale_bar(lon = -130, lat = 26, 
-              distance_lon = 500, distance_lat = 100, distance_legend = 200, 
-              dist_unit = "km", orientation = FALSE)
-
-P <- P + scale_bar(lon = -130, lat = 26,
-                   distance_lon = 500, distance_lat = 100,
-                   distance_legend = 200, dist_unit = "km")
-
-P + theme(panel.grid.minor = element_line(colour = NA),
-          panel.background = element_rect(fill = NA, colour = NA), axis.text.x = element_blank(),
-          axis.text.y = element_blank(), axis.ticks.x = element_blank(),
-          axis.ticks.y = element_blank(), axis.title = element_blank(),
-          rect = element_blank(),
-          plot.margin = unit(0 * c(-1.5, -1.5, -1.5, -1.5), "lines"))
-
-france_map <- map_data("france")
-P_fr <- ggplot() + geom_polygon(data = france_map, aes(x = long, y = lat, group = group)) + coord_map()
-
-# Let us add the scale bar and arrow separately
-P_fr + scale_bar(lon = -5, lat = 42.5,
-                 distance_lon = 100, distance_lat = 20,
-                 distance_legend = 40, dist_unit = "km", 
-                 orientation = FALSE) + 
-  scale_bar(lon = -5, lat = 50,
-            distance_lon = 0, distance_lat = 0,
-            distance_legend = 0, legend_size = 0,
-            dist_unit = "km", 
-            orientation = TRUE, arrow_length = 100, arrow_distance = 60, arrow_north_size = 6)
-
-# Modifying the theme a bit
-P_fr + theme(panel.grid.minor = element_line(colour = NA), 
-             panel.background = element_rect(fill = NA, colour = NA), axis.text.x = element_blank(),
-             axis.text.y = element_blank(), axis.ticks.x = element_blank(),
-             axis.ticks.y = element_blank(), axis.title = element_blank(),
-             rect = element_blank(),
-             plot.margin = unit(0 * c(-1.5, -1.5, -1.5, -1.5), "lines"))
+#   usa_map <- map_data("state")
+#   P <- ggplot() + geom_polygon(data = usa_map, aes(x = long, y = lat, group = group)) + coord_map()
+#   
+#   P + scale_bar(lon = -130, lat = 26, 
+#                 distance_lon = 500, distance_lat = 100, distance_legend = 200, 
+#                 dist_unit = "km", orientation = FALSE)
+#   
+#   P <- P + scale_bar(lon = -130, lat = 26,
+#                      distance_lon = 500, distance_lat = 100,
+#                      distance_legend = 200, dist_unit = "km")
+#   
+#   P + theme(panel.grid.minor = element_line(colour = NA),
+#             panel.background = element_rect(fill = NA, colour = NA), axis.text.x = element_blank(),
+#             axis.text.y = element_blank(), axis.ticks.x = element_blank(),
+#             axis.ticks.y = element_blank(), axis.title = element_blank(),
+#             rect = element_blank(),
+#             plot.margin = unit(0 * c(-1.5, -1.5, -1.5, -1.5), "lines"))
+#   
+#   france_map <- map_data("france")
+#   P_fr <- ggplot() + geom_polygon(data = france_map, aes(x = long, y = lat, group = group)) + coord_map()
+#   
+#   # Let us add the scale bar and arrow separately
+#   P_fr + scale_bar(lon = -5, lat = 42.5,
+#                    distance_lon = 100, distance_lat = 20,
+#                    distance_legend = 40, dist_unit = "km", 
+#                    orientation = FALSE) + 
+#     scale_bar(lon = -5, lat = 50,
+#               distance_lon = 0, distance_lat = 0,
+#               distance_legend = 0, legend_size = 0,
+#               dist_unit = "km", 
+#               orientation = TRUE, arrow_length = 100, arrow_distance = 60, arrow_north_size = 6)
+#   
+#   # Modifying the theme a bit
+#   P_fr + theme(panel.grid.minor = element_line(colour = NA), 
+#                panel.background = element_rect(fill = NA, colour = NA), axis.text.x = element_blank(),
+#                axis.text.y = element_blank(), axis.ticks.x = element_blank(),
+#                axis.ticks.y = element_blank(), axis.title = element_blank(),
+#                rect = element_blank(),
+#                plot.margin = unit(0 * c(-1.5, -1.5, -1.5, -1.5), "lines"))
+#   
