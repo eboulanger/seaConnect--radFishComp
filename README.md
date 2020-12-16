@@ -1,14 +1,14 @@
 -- under development --
 
 # seaConnect--radFishComp
-Comparison of fish RAD sequence data: compare different species and different marker types for population/fisheries genomic
+Comparison of fish SNP data: compare different species and different marker types for population/fisheries genomic
 
 ## Data
-RADseq SNP calling was performed by [P. Guerrin using a dDocent-based pipeline](https://github.com/Grelot/seaConnect--dDocent)    
+GBS SNP calling was performed by [P. Guerrin using a dDocent-based pipeline](https://github.com/Grelot/seaConnect--dDocent)    
 SNPs were then filtered for missing data, maf, ... and outliers were detected to retain 
 only adaptive or neutral loci for both species. 
 Finally, datasets are converted to the correct formats for different analyses.  
-The scripts can be found in the project [seaConnect--dataPrep](https://github.com/eboulanger/seaConnect--dataPrep)      
+The filtering and convertion scripts can be found in the project [seaConnect--dataPrep](https://github.com/eboulanger/seaConnect--dataPrep)      
 
 ## Dependencies
 You will need to install the following software:  
