@@ -36,11 +36,9 @@ For both a scatterplot is created. For the latter, a pie map with the posterior 
 probabilities is created comparable to the ancestry pie maps created in `01-ADMIXTURE`,
 as well as a barplot of the posterior membership probabilities with individuals ordered by longitude within Mediterranean Sea Ecoregions.
 
-## 03a-dbMEM
+## 03a-dbMEM & 03b-AEM
 
 Following the [tutorial](https://github.com/laurabenestan/Moran-Eigenvector-Maps-MEMs) of L. Benestan.
-
-## 03b-AEM
 
 ## 03c-RDA
 
